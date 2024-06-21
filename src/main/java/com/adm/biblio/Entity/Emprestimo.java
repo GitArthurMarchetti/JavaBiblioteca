@@ -17,7 +17,7 @@ public class Emprestimo {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long IdLivro;
+    private Long IdEmprestimo;
     
     @ManyToOne
     @JsonBackReference
@@ -35,17 +35,17 @@ public class Emprestimo {
     @Column(nullable=false)
     private Date dataEntrega;
     
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String devolucao;
     
     //------------------------------G&S-----------------------------------------
 
-    public Long getIdLivro() {
-        return IdLivro;
+    public Long getIdEmprestimo() {
+        return IdEmprestimo;
     }
 
-    public void setIdLivro(Long IdLivro) {
-        this.IdLivro = IdLivro;
+    public void setIdEmprestimo(Long IdEmprestimo) {
+        this.IdEmprestimo = IdEmprestimo;
     }
 
     public Estudante getEstudante() {
@@ -71,7 +71,7 @@ public class Emprestimo {
     public void setMatricula(Long matricula) {
         this.matricula = matricula;
     }
-    
+
     public Date getDataEmprestimo() {
         return dataEmprestimo;
     }
@@ -95,7 +95,7 @@ public class Emprestimo {
     public void setDevolucao(String devolucao) {
         this.devolucao = devolucao;
     }
-    
-    
+
+   
     
 }
