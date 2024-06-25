@@ -15,7 +15,7 @@ public class LivroService {
     @Autowired
     private LivroRepository livroRepository;
     
-    public Long incluirProduto(Livro livro){
+    public Long incluirLivro(Livro livro){
         if(livro.getTitulo()== null ||
                 livro.getAutor()== null ||
                 livro.getAno()== null){
@@ -25,9 +25,9 @@ public class LivroService {
     }
     
     
-     public boolean excluirProduto(Long IdProduto){
-      if(livroRepository.findById(IdProduto).isPresent()){
-          livroRepository.deleteById(IdProduto);
+     public boolean excluirLivro(Long IdLivro){
+      if(livroRepository.findById(IdLivro).isPresent()){
+          livroRepository.deleteById(IdLivro);
           return true;
       }
         return false;
@@ -45,10 +45,12 @@ public class LivroService {
      public List<Livro> listarLivro(){
          return livroRepository.findAll();
      }
+     
+     
      public Livro consultarLivroPorTitulo(String tituloLivro){
-         return livroRepository.findByTitulo(tituloLivro);
+         return livroRepository.findByTitulo(tituloLivro.replaceAll("_", " "));
      }
-     public boolean alterarProduto(Livro livro){
+     public boolean alterarLivro(Livro livro){
         if(livro.getTitulo() == null ||
             livro.getAutor() == null ||
             livro.getAno() == null ||

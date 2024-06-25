@@ -84,4 +84,36 @@ public class EstudanteService {
         return null;
     }
    
+     public boolean alterarEstudante(Estudante estudante){
+        
+        if(estudante.getNome() == null || estudante.getNome() == ""){
+        return false;
+    }
+        if(estudante.getEmail() == null || estudante.getEmail() == ""){
+        return false;
+    }
+         if(estudante.getMatricula() == null){
+            return false;
+        }
+         Estudante estBD = estudanteRepository.getReferenceById(estudante.getIdEstudante());
+       
+        if( estBD != null){
+        if(estBD.getMatricula() != estudante.getMatricula() &&
+            estudanteRepository.findByMatricula(estudante.getMatricula()) != null){    
+            return false;
+         }
+        
+
+        estBD.setMatricula(estudante.getMatricula());
+        estBD.setEmail(estudante.getEmail());
+        estBD.setSenha(estudante.getSenha());
+        estBD.setTelefone(estudante.getTelefone());
+        estBD.setNascimento(estudante.getNascimento());
+        estBD.setNome(estudante.getNome());
+        estudanteRepository.save(estBD);
+        return true;
+        }
+        return false;
+    }
+    
 }

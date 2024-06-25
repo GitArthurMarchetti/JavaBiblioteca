@@ -11,5 +11,5 @@ public interface EstudanteRepository extends JpaRepository<Estudante,Long>{
     
     Estudante findByMatricula(Long matricula);
     Estudante findByEmail(String email);
-    List<Estudante> findByNome(Long matricula);
+    List<Estudante> findByNome(String nome);
 }
