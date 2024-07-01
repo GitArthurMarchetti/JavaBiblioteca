@@ -50,6 +50,11 @@ public class EmprestimoService {
         return null;
     }
        
+           public List<Emprestimo> listarEmprestimo(){
+       
+        return emprestimoRepository.findAll();      
+    }
+       
        public boolean alterarEmprestimo(Emprestimo emprestimo){
          Emprestimo emprestimoBD = emprestimoRepository.getReferenceById(emprestimo.getIdEmprestimo());
         
