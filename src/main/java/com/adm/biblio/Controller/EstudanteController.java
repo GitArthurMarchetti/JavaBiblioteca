@@ -4,6 +4,9 @@ package com.adm.biblio.Controller;
 import com.adm.biblio.Entity.Estudante;
 import com.adm.biblio.Entity.Login;
 import com.adm.biblio.Service.EstudanteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,12 @@ public class EstudanteController {
     
     
       @PostMapping("/estudante")
+       @Operation(summary = "Manter estudantes no Sistema",description = "Listar Todos os estudantes cadastrados")
+@ApiResponses(value = {
+@ApiResponse(responseCode = "200", description = "Retorna a lista de estudantes" ),
+@ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+@ApiResponse(responseCode = "500", description = "Erro interno no servidor!"),
+})
     public ResponseEntity<Long> incluirNovoEstudante(@RequestBody Estudante estudante){
         Long idEs = estudanteService.incluirEstudante(estudante);
         if(idEs != null){
