@@ -43,7 +43,7 @@ public class EmprestimoService {
     }
        
        public List<Emprestimo> listarEmprestimoPorEstudante(Long IdEstudante){
-       Estudante estudante = estudanteService.consultarEstudantePorId(IdEstudante);
+       Estudante estudante = estudanteService.consultaEstudantePorId(IdEstudante);
         if(estudante != null){
             return emprestimoRepository.findByEstudante(estudante);
         }

@@ -55,27 +55,53 @@ public class EstudanteController {
        
     @DeleteMapping("/{idEstudante}")
     public ResponseEntity<Long> excluirEstudante(@PathVariable("idEstudante") Long idEstudante){
-        if(estudanteService.excluirEstudante(idEstudante)){
+        if(estudanteService.excluirEstudantePorId(idEstudante)){
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
-     @GetMapping("/estudante")
-    public ResponseEntity<List<Estudante>> listarEstudantes(){
-        List<Estudante> listEst = estudanteService.listarEstudantes();
-        if(! listEst.isEmpty()){
-            return new ResponseEntity<>(listEst ,HttpStatus.OK);
+     @GetMapping("/estudante/id/{IdEstudante}")
+    public ResponseEntity<Estudante> consultaEstudantePorId(@PathVariable("IdEstudante") Long IdEstudante){
+        Estudante estude = estudanteService.consultaEstudantePorId(IdEstudante);
+        if(estude != null){
+            return new ResponseEntity<>(estude,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
-      @GetMapping("/estudante/id/{IdEstudante}")
-    public ResponseEntity<Estudante> consultaEstudantePorId(
-    @PathVariable("IdCliente") Long IdEstudante){
-        Estudante estudante = estudanteService.consultarEstudantePorId(IdEstudante);
-        if(estudante != null){
-            return new ResponseEntity<>(estudante ,HttpStatus.OK);
+    @GetMapping("/estudante/matricula/{matricula}")
+    public ResponseEntity<List<Estudante>> consultaEstudantePorMatricula(@PathVariable("matricula") Long matricula){
+        List<Estudante> estude = estudanteService.consultaEstudantePorMatricula(matricula);
+        if( ! estude.isEmpty() ){
+            return new ResponseEntity<>(estude,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/estudante/email/{email}")
+    public ResponseEntity<List<Estudante>> consultaEstudantePorEmail(@PathVariable("email") String email){
+        List<Estudante> estude = estudanteService.consultaEstudantePorEmail(email);
+        if( ! estude.isEmpty() ){
+            return new ResponseEntity<>(estude,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/estudante/nome/{nome}")
+    public ResponseEntity<List<Estudante>> consultaEstudantePorNome(@PathVariable("nome") String nome){
+        List<Estudante> estude = estudanteService.consultaEstudantePorNome(nome);
+        if(estude != null){
+            return new ResponseEntity<>(estude,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/estudante/pag/{pagina}")
+    public ResponseEntity<List<Estudante>> listarEstudantesPaginando(@PathVariable("pagina") Integer pagina){
+        List<Estudante> estude = estudanteService.listarEstudante(pagina);
+        if(estude != null){
+            return new ResponseEntity<>(estude,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
