@@ -71,7 +71,7 @@ public class EstudanteController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
-     @PutMapping("cliente")
+     @PutMapping("estudante")
     public ResponseEntity<Boolean> alterarEstudante(@RequestBody Estudante estudante){
        if(estudanteService.alterarEstudante(estudante)){
            return new ResponseEntity<>(true, HttpStatus.OK);

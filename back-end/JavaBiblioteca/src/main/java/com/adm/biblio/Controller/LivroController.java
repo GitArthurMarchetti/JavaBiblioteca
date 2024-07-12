@@ -43,7 +43,7 @@ public class LivroController {
     }
     
     
-     // (Get) http://localhost:8010/venda/produto/10
+     // (Get) http://localhost:8010/biblioteca/livro/10
     @GetMapping("/Livro/id/{IdLivro}") 
     public ResponseEntity<Livro> consultaLivroPorId(@PathVariable("IdLivro")
                                                         Long IdLivro){
