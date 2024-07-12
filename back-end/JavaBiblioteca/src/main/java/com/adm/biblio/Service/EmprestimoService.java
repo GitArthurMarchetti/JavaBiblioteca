@@ -2,6 +2,7 @@ package com.adm.biblio.Service;
 
 import com.adm.biblio.Entity.Emprestimo;
 import com.adm.biblio.Entity.Estudante;
+import com.adm.biblio.Entity.Livro;
 import com.adm.biblio.Repository.EmprestimoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,25 @@ public class EmprestimoService {
     @Autowired
     private EstudanteService estudanteService;
     
-    public Long incluirEmprestimo(Emprestimo emprestimo){
+    @Autowired
+    private LivroService livroService;
+    
+    public Long incluirEmprestimo(Emprestimo emprestimo, Long IdEstudante, Long IdLivro){
         
-        if(emprestimo.getEstudante() == null ||
+        if(IdEstudante == null ||
            emprestimo.getDataEmprestimo() == null ||
            emprestimo.getDataEntrega() == null ||
-           emprestimo.getLivro() == null){
+           IdLivro == null){
             return null;
         }
-        
-      return emprestimoRepository.save(emprestimo).getIdEmprestimo();  
+        Estudante estudante = estudanteService.consultarEstudantePorId(IdEstudante);
+        Livro livro = livroService.consultarLivroPorId(IdLivro);
+        if(estudante != null && livro != null){
+         emprestimo.setEstudante(estudante);
+         emprestimo.setLivro(livro);
+         return emprestimoRepository.save(emprestimo).getIdEmprestimo();  
+        }
+        return null;
     }
     
        public boolean excluirEmprestimo(Long IdEmprestimo){
@@ -43,7 +53,7 @@ public class EmprestimoService {
     }
        
        public List<Emprestimo> listarEmprestimoPorEstudante(Long IdEstudante){
-       Estudante estudante = estudanteService.consultaEstudantePorId(IdEstudante);
+       Estudante estudante = estudanteService.consultarEstudantePorId(IdEstudante);
         if(estudante != null){
             return emprestimoRepository.findByEstudante(estudante);
         }

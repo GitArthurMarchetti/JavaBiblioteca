@@ -3,6 +3,7 @@ package com.adm.biblio.Controller;
 
 import com.adm.biblio.Entity.Emprestimo;
 import com.adm.biblio.Service.EmprestimoService;
+import jakarta.websocket.server.PathParam;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,13 +42,15 @@ public class EmprestimoController {
     }
     
     
-    @PostMapping("/emprestimo")
-    public ResponseEntity<Long> incluirEmprestimo(@RequestBody Emprestimo emprestimo){
-        Long idEmp = emprestimoService.incluirEmprestimo(emprestimo);
+    @PostMapping("/emprestimo/{IdEstudante}/{IdLivro}")
+    public ResponseEntity<Long> incluirEmprestimo(@RequestBody Emprestimo emprestimo,
+                                                  @PathVariable("IdEstudante") Long IdEstudante,
+                                                  @PathVariable("IdLivro") Long IdLivro){
+        Long idEmp = emprestimoService.incluirEmprestimo(emprestimo,IdEstudante,IdLivro);
         if(idEmp != null){
             return new ResponseEntity<>(idEmp, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     
     @DeleteMapping("/emprestimo/{IdEmprestimo}")

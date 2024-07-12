@@ -17,7 +17,6 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3001"); // Allow requests from this origin
         config.addAllowedOrigin("http://127.0.0.1:3001"); // Allow requests from this origin
-        config.addAllowedOrigin("http://localhost:3000"); // Allow requests from this origin (Next.js frontend)
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

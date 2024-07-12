@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -15,11 +17,9 @@ public class Livro {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_livro")
     private Long IdLivro;
-    
-    @OneToOne
-    private Emprestimo emprestimo;
-    
+
     @Column(nullable=false)
     private String titulo;
     
@@ -31,6 +31,10 @@ public class Livro {
     
     @Column(nullable=false)
     private Integer ano;
+    
+    @OneToOne
+    @JoinColumn(name = "id_livro")
+    private Emprestimo emprestimo;
     
     // ----------------------------------G&S------------------------------------
 

@@ -6,6 +6,9 @@ import com.adm.biblio.Repository.LivroRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +17,8 @@ public class LivroService {
     
     @Autowired
     private LivroRepository livroRepository;
+    
+    Pageable pageable;
     
     public Long incluirLivro(Livro livro){
         if(livro.getTitulo()== null ||
@@ -42,8 +47,11 @@ public class LivroService {
          
      }
      
-     public List<Livro> listarLivro(){
-         return livroRepository.findAll();
+     public List<Livro> listarLivro(Integer pagina){
+         
+         pagina = (pagina -1);
+         pageable = PageRequest.of(pagina,15,Sort.by("titulo").ascending());
+         return livroRepository.findAll(pageable).getContent();
      }
      
      

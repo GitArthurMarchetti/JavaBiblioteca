@@ -3,6 +3,8 @@ package com.adm.biblio.Controller;
 import com.adm.biblio.Entity.Estudante;
 import com.adm.biblio.Entity.Livro;
 import com.adm.biblio.Service.LivroService;
+import jakarta.websocket.server.PathParam;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +24,18 @@ public class LivroController {
     public LivroService livroService;
     
     
-     @PostMapping("/livro")
+    @PostMapping("/livro")
     public ResponseEntity<Long> incluirNovoLivro(@RequestBody Livro livro){
         Long idLivro = livroService.incluirLivro(livro);
         if(idLivro != null){
             return new ResponseEntity<>(idLivro, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }//POST  http://localhost:8020/biblioteca/estudante
+    }//POST  http://localhost:8010/biblioteca/estudante
    
        
-    @DeleteMapping("/{idLivro}")
-    public ResponseEntity<Long> excluirEstudante(@PathVariable("idLivro") Long idLivro){
+    @DeleteMapping("/livro/{idLivro}")
+    public ResponseEntity<Long> excluirLivro(@PathVariable("idLivro") Long idLivro){
         if(livroService.excluirLivro(idLivro)){
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -42,7 +44,7 @@ public class LivroController {
     
     
      // (Get) http://localhost:8010/venda/produto/10
-    @GetMapping("/Livro/{IdLivro}") 
+    @GetMapping("/Livro/id/{IdLivro}") 
     public ResponseEntity<Livro> consultaLivroPorId(@PathVariable("IdLivro")
                                                         Long IdLivro){
         Livro livro = livroService.consultarLivroPorId(IdLivro);
@@ -54,7 +56,7 @@ public class LivroController {
     
     
     
-     @GetMapping("/Livro/{tituloLivro}") 
+    @GetMapping("/livro/titulo/{tituloLivro}") 
     public ResponseEntity<Livro> consultaLivroPorTitulo(@PathVariable("tituloLivro")
                                                         String tituloLivro){
         Livro livro = livroService.consultarLivroPorTitulo(tituloLivro);
@@ -72,5 +74,14 @@ public class LivroController {
        }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
     }
+    @GetMapping("/livro/pag/{pagina}")
+    public ResponseEntity<List<Livro>> listarLivrosPorPaginas(@PathVariable("pagina") Integer pagina){
+        System.out.println("Pagina: " + pagina);
+        List<Livro> livros = livroService.listarLivro(pagina);
+        if( ! livros.isEmpty() ){
+            return new ResponseEntity<>(livros, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }//POST  http://localhost:8010/biblioteca/estudante
     
 }
