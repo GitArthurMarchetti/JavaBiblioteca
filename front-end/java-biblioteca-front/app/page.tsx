@@ -1,18 +1,20 @@
 "use client"
-import Image from "next/image";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Cadastro from "./pages/cadastro"
-import Login from "./pages/login"
-import HomeBiblio from "./pages/home"
+import Home from './pages/home';
+import Login from './pages/login';
+import Cadastro from './pages/cadastro'; // Ensure Cadastro is imported correctly as defaul
 
-export default function Home() {
+function App() {
   return (
     <Router>
-    <Routes>
-      <Route path="/" element={<HomeBiblio />} />        
-      <Route path="/login" element={<Login />} />
-      <Route path="/Cadastro" element={<Cadastro />} />
-    </Routes>
-  </Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/login" element={<Login />} />
+        {/* Other routes */}
+      </Routes>
+    </Router>
   );
 }
+
+export default App;

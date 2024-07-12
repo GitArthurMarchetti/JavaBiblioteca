@@ -1,110 +1,148 @@
 "use client"
-import Nav from "./component/nav"
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const cadastrar = async (nome: string, senha: string, email: string, nascimento: string, matricula: number, telefone: string) => {
-  try {
-    const response = await axios.post('http://localhost:8020/biblio/estudante', {
-      nome: nome,
-      matricula: matricula,
-      nascimento: nascimento,
-      email: email,
-      senha: senha,
-      telefone: telefone
-    });
-    alert("Cadastro realizado com sucesso!"); // Exibe mensagem de sucesso
-    return response.data; // Retorna os dados da resposta
-  } catch (error) {
-    console.error('Erro ao cadastrar:', error);
-    alert("Erro ao cadastrar usuário."); // Exibe mensagem de erro
-    throw error; // Lança o erro para ser tratado no componente
-  }
-};
-
-export default function Cadastro() {
-  const [nome, setNome] = useState('');
-  const [senha, setSenha] = useState('');
-  const [email, setEmail] = useState('');
-  const [nascimento, setNascimento] = useState('');
-  const [matricula, setMatricula] = useState<number>(0); 
-  const [telefone, setTelefone] = useState('');
+import { useNavigate } from 'react-router-dom';
 
 
-  const handleCadastro = async () => {
-    try {
-      const response = await cadastrar(nome, senha, email, nascimento, matricula, telefone);
-      alert(response);
-    } catch (error) {
-      console.error('Erro ao se logar:', error);
-    }
-  };
-  return (
-    <>
-      <Nav />
-      <div>
-        <h1>Cadastrar usuario</h1>
-        <form>
-          <label>
-            Nome:
-            <input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Matricula:
-            <input
-              type="number"
-              value={matricula}
-              onChange={(e) => setMatricula(parseInt(e.target.value))}
-            />
-          </label>
-          <br />
-          <label>
-            Senha:
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-          Nascimento:
-            <input
-              type="date"
-              value={nascimento}
-              onChange={(e) => setNascimento(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-          Telefone:
-            <input
-              type="text"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-            />
-          </label>
-          <br />
-          <button type="button" onClick={handleCadastro}>
-            Cadastrar
-          </button>
-        </form>
-      </div>
-
-    </>
-  );
+function Cadastro(){
+    const [reptpasswordRef, setReptpasswordRef] = useState('')
+    const [novoUser, setNovoUser] = useState({
+      id: 0,
+      nome: '',
+      matricula: '',
+      email: '',
+      telefone: '',
+      isBiblio: false,
+      senha: ''
+    })
+    const navigate = useNavigate()
+  
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setNovoUser((prevAluno) => ({
+        ...prevAluno,
+        [name]: value,
+      }));
+    };
+    const senha = novoUser.senha
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (senha == reptpasswordRef) {
+        alert("As senhas não coincidem!")
+      }
+      try {
+        const response = await axios.post('http:/localhost:8020/biblio/estudante', novoUser);
+        const id = response.data
+        const dadosUser = await axios.get(`http:/localhost:8020/biblio/estudante/id/${id}`)
+        localStorage.setItem("nomeuser", dadosUser.data.nome)
+        localStorage.setItem("idUser", dadosUser.data.idEstudante)
+        localStorage.setItem("isBiblio", dadosUser.data.isBiblio)
+        navigate("/")
+      } catch (error) {
+        console.error('Erro ao salvar o estudante:', error);
+      }
+    };
+  
+    return (
+      <>
+        <div className='varela-round-regular h-[100vh] flex justify-center items-center ' >
+          <form onSubmit={handleSubmit} className=' border-2 border-black p-8 rounded-xl'>
+            <h1 className='text-center mb-10 '>Cadastro Estudante</h1>
+            <div className="flex flex-row">
+  
+              <div >
+                <div className='flex flex-col'>
+                  <label className='inputMatricula'>
+                    Nome
+                  </label>
+                  <input
+                    id="nome"
+                    name="nome"
+                    value={novoUser.nome}
+                    onChange={handleInputChange}
+                    className='bg-gray-300 border-none rounded-lg border mb-8'
+                    type="text"
+                  />
+                </div>
+                <div className='flex flex-col'>
+                  <label className='inputSenha'>
+                    Matricula</label>
+                  <input
+                    id="matricula"
+                    name="matricula"
+                    value={novoUser.matricula}
+                    onChange={handleInputChange}
+                    className='bg-gray-300 border-none rounded-xl border mb-8'
+                    type="number"
+                  />
+                </div>
+                <div className='flex flex-col'>
+                  <label className='inputSenha'>
+                    E-mail</label>
+                  <input
+                    id="email"
+                    name="email"
+                    value={novoUser.email}
+                    onChange={handleInputChange}
+                    className='bg-gray-300 border-none rounded-xl border mb-4'
+                    type="text"
+                  />
+                </div>
+              </div>
+  
+              <div className="pl-12">
+                <div className='flex flex-col'>
+                  <label className='inputSenha'>
+                    Telefone</label>
+                  <input
+                    id="telefone"
+                    name="telefone"
+                    value={novoUser.telefone}
+                    onChange={handleInputChange}
+                    className='bg-gray-300 border-none rounded-xl border mb-8'
+                    type="text"
+                  />
+                </div>
+                <div className='flex flex-col'>
+                  <label className='inputSenha'>
+                    Senha</label>
+                  <input
+                    id="senha"
+                    name="senha"
+                    value={novoUser.senha}
+                    onChange={handleInputChange}
+                    className='bg-gray-300 border-none rounded-xl border mb-8'
+                    type="password"
+                  />
+                </div>
+                <div className='flex flex-col'>
+                  <label className='inputSenha'>
+                    Repetir senha</label>
+                  <input
+                    id="reptsenha"
+                    name="reptsenha"
+                    value={reptpasswordRef}
+                    onChange={(e) => setReptpasswordRef(e.target.value)}
+                    className='bg-gray-300 border-none rounded-xl border'
+                    type="password"
+                  />
+                </div>
+              </div>
+            </div>
+  
+            <div className='flex  justify-center mt-8'>
+              <button className='botaoLogar p-2 border-none rounded-xl border' type="submit" >
+                Cadastrar
+              </button>
+            </div>
+            <p className='mt-5 flex  justify-center'>
+              Já possui uma conta?
+              <a className='ml-2 underline' href='/login'>Faça login</a>
+            </p>
+          </form>
+        </div>
+      </>
+    )
 }
+
+export default Cadastro; // Export Cadastro as default

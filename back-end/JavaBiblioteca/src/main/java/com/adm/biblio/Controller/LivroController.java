@@ -23,13 +23,13 @@ public class LivroController {
     
     
      @PostMapping("/livro")
-    public ResponseEntity<Long> incluirNovoEstudante(@RequestBody Livro livro){
+    public ResponseEntity<Long> incluirNovoLivro(@RequestBody Livro livro){
         Long idLivro = livroService.incluirLivro(livro);
         if(idLivro != null){
             return new ResponseEntity<>(idLivro, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }//POST  http://localhost:8010/biblioteca/estudante
+    }//POST  http://localhost:8020/biblioteca/estudante
    
        
     @DeleteMapping("/{idLivro}")

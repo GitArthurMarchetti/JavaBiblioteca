@@ -1,64 +1,70 @@
 "use client"
-import Nav from "./component/nav"
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const logar = async (matricula: number, senha: string) => {
-  try {
-    const response = await axios.post('http://localhost:8020/biblio/estudante/login', {
-      matricula: matricula,
-      senha: senha,
-    });
-    alert("Login realizado com sucesso!"); // Exibe mensagem de sucesso
-    return response.data; // Retorna os dados da resposta
-  } catch (error) {
-    console.error('Erro ao cadastrar:', error);
-    alert("Erro ao cadastrar usuário."); // Exibe mensagem de erro
-    throw error; // Lança o erro para ser tratado no componente
-  }
-};
+import { useNavigate } from 'react-router-dom';
 
 
-export default function Login() {
-  const [matricula, setMatricula] = useState<number>(0);
-  const [senha, setSenha] = useState('');
-  const handleLogin = async () => {
-    try {
-      const response = await logar(matricula, senha);
-      alert(response);
-    } catch (error) {
-      console.error('Erro ao se logar:', error);
-    }
-  };
-
-  return (
-    <>
-      <Nav />
-      <h1>Login</h1>
-      <form>
-        <label>
-          Matricula:
+function Login(){
+    const navigate = useNavigate()
+    const [matricula, setMatricula] = useState('');
+    const [senha, setSenha] = useState('');
+  
+    const handleLogin = async () => {
+      axios.post("http://localhost:8020/biblio/estudante/login", { matricula: matricula, senha: senha })
+        .then(function (response) {
+          const nome = response.data.nome
+          localStorage.setItem("nomeuser", nome)
+          localStorage.setItem("idUser", response.data.idEstudante)
+          localStorage.setItem("isBiblio", response.data.isBiblio)
+          navigate('/')
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("Usuario ou senha incorreto")
+        });
+  
+    };
+    return(
+        <>
+         <div className='varela-round-regular h-[100vh] flex justify-center items-center ' >
+      <form onSubmit={handleLogin} className=' border-2 border-black p-8 rounded-xl'>
+        <h1 className='text-center mb-10 '>Login Estudante</h1>
+        <div className='flex flex-col'>
+          <label className='inputMatricula'>
+            Matrícula
+          </label>
           <input
-            type="text"
+            required
+            className='bg-gray-300 border-none rounded-lg border mb-8'
+            type="number"
             value={matricula}
-            onChange={(e) => setMatricula(parseInt(e.target.value))}
+            onChange={(e) => setMatricula(e.target.value)}
           />
-        </label>
-        <br />
-        <label>
-          Senha:  
+        </div>
+        <div className='flex flex-col'>
+          <label className='inputSenha'>
+            Senha</label>
           <input
-            type="senha"
+
+            className='bg-gray-300 border-none rounded-xl border'
+            type="password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
-        </label>
-        <br />
-        <button type="button" onClick={handleLogin}>
-          Logar
-        </button>
+        </div>
+        <div className='flex  justify-center mt-8'>
+          <button className='botaoLogar border-none rounded-xl border p-2' type="button" onClick={handleLogin} >
+            Logar
+          </button>
+        </div>
+        <p className='mt-5'>
+          Não possui cadastro?
+          <a href='/cadastro' className='underline ml-2'>Cadastrar-se</a>
+        </p>
       </form>
-
-    </>
-  );
+    </div>
+        </>
+    )
 }
+
+export default Login;
